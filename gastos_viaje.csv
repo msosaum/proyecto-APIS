@@ -1,0 +1,13 @@
+fecha,categoria,descripcion,monto,pagado
+2025-03-10,alojamiento,Hostel Salta noche 1-3,15000,si
+2025-03-10,comida,Supermercado llegada,4200,si
+2025-03-11,transporte,Bus Salta-Purmamarca,3800,si
+2025-03-11,comida,Almuerzo Purmamarca,2500,si
+2025-03-12,excursion,Tour Salinas Grandes,6000,si
+2025-03-12,comida,Cena grupal,3100,si
+2025-03-13,alojamiento,Hostel Purmamarca noche 4-5,12000,no
+2025-03-13,comida,Desayuno + snacks,1800,si
+2025-03-14,excursion,Excursion Cerro de los Siete Colores,5500,no
+2025-03-14,comida,Almuerzo,2200,si
+2025-03-15,transporte,Remis a terminal,1500,si
+2025-03-15,comida,Cena despedida,3600,si
