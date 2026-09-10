@@ -101,37 +101,16 @@ if HF_TOKEN and HuggingFaceEndpoint is not None and ChatHuggingFace is not None:
 TOOLS_POR_NOMBRE = {"consultar_gastos": consultar_gastos}
 
 
-def _respuesta_fallback(pregunta: str) -> str:
-    """Respuesta determinista cuando no hay token ni acceso a modelo."""
-    df = pd.read_csv(CSV_PATH)
-    total = float(df["monto"].sum())
-    pagado = float(df[df["pagado"] == "si"]["monto"].sum())
-    pendiente = float(df[df["pagado"] == "no"]["monto"].sum())
-
-    pregunta = pregunta.lower()
-    if "pendiente" in pregunta or "falta pagar" in pregunta or "falta" in pregunta:
-        return (
-            f"Hasta ahora llevamos gastado ${total:,.0f} en total. "
-            f"De ese total, ya está pagado ${pagado:,.0f} y aún falta pagar ${pendiente:,.0f}."
-        )
-
-    if "pagado" in pregunta or "ya gast" in pregunta or "total" in pregunta:
-        return (
-            f"Llevamos gastado ${total:,.0f} en total; "
-            f"${pagado:,.0f} ya están pagados y falta pagar ${pendiente:,.0f}."
-        )
-
-    return (
-        f"Llevamos gastado ${total:,.0f} en total. "
-        f"Actualmente falta pagar ${pendiente:,.0f}."
-    )
-
-
 def ejecutar_agente(pregunta: str, max_iteraciones: int = 4) -> str:
-    """Loop simple de tool-calling; si no hay modelo disponible, responde con
-    cálculo determinista sobre la planilla."""
+    """Loop simple de tool-calling."""
     if llm_con_tools is None or HumanMessage is None or SystemMessage is None:
-        return _respuesta_fallback(pregunta)
+        raise RuntimeError(
+            "No se pudo inicializar el modelo. Verificá que las dependencias "
+            "estén instaladas (pip install langchain-huggingface langchain-core) "
+            "y que la variable de entorno HF_TOKEN esté configurada con un "
+            "token válido de Hugging Face (ver README.md, sección 'Cómo "
+            "ejecutarlo')."
+        )
 
     mensajes = [SystemMessage(content=SYSTEM_PROMPT), HumanMessage(content=pregunta)]
 

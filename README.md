@@ -26,22 +26,52 @@ planilla (sin usar el LLM para el cómputo).
 pip install langchain-huggingface langchain-core pandas
 ```
 
-Necesitás un token de Hugging Face con acceso a modelos de inferencia:
-[huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+Necesitás un token de Hugging Face con acceso a modelos de inferencia. El
+agente **no funciona sin este token** (no hay modo offline ni respuesta de
+respaldo): si falta o es inválido, `ejecutar_agente` lanza un `RuntimeError`
+explicando qué falta.
 
-## Cómo ejecutarlo
+## Cómo configurar el token
 
-1. Exportá tu token como variable de entorno:
+1. Creá una cuenta en [huggingface.co](https://huggingface.co) si no tenés una.
+2. Generá un token en
+   [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+   (alcanza con permisos de lectura / "Inference").
+3. Asegurate de que tu cuenta tenga acceso al modelo usado
+   (`Qwen/Qwen3-4B-Instruct-2507`, definido en `MODEL_ID` dentro de
+   `agente_viaje.py`) y de que ese modelo tenga el proveedor de inferencia
+   habilitado en tu cuenta de Hugging Face.
+4. Exportá el token como variable de entorno **en la misma terminal** desde
+   donde vas a correr el script:
 
    ```bash
    export HF_TOKEN="tu_token_aca"
    ```
 
-2. Corré el script:
+   Para no repetir este paso en cada sesión, agregá esa línea a tu `~/.bashrc`,
+   `~/.zshrc` (o equivalente) y abrí una terminal nueva.
+
+5. Verificá que quedó seteada:
 
    ```bash
-   python agente_viaje.py
+   echo $HF_TOKEN
    ```
+
+   Si no imprime nada, el export no se aplicó (revisá que sea la misma
+   terminal/sesión).
+
+## Cómo ejecutarlo
+
+Con el token ya configurado, corré:
+
+```bash
+python agente_viaje.py
+```
+
+Si ves un `RuntimeError` indicando que no se pudo inicializar el modelo,
+repasá los pasos anteriores: normalmente es porque `HF_TOKEN` no está seteado,
+el token no tiene permisos de inferencia, o faltan las dependencias
+(`pip install langchain-huggingface langchain-core`).
 
 Por defecto corre con la pregunta contraejemplo que justificamos en
 `docs/E1.md`: cuánto se gastó y cuánto falta pagar, combinando un gasto ya
