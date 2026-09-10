@@ -23,7 +23,9 @@ planilla (sin usar el LLM para el cómputo).
 ## Requisitos
 
 ```bash
-pip install langchain-huggingface langchain-core pandas
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
 Necesitás un token de Hugging Face con acceso a modelos de inferencia. El
